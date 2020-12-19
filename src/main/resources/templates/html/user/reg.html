@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>注册</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/animate.css}" >
+</head>
+<body>
+
+<div class="fly-header layui-bg-black" th:replace="/html/index::banner">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+      <img src="../../res/images/logo.png" alt="layui">
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <li class="layui-nav-item layui-this">
+        <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+      </li>
+    </ul>
+    
+    <ul class="layui-nav fly-nav-user">
+      <!-- 未登入的状态 -->
+      <li class="layui-nav-item">
+        <a class="iconfont icon-touxiang layui-hide-xs" href="user/login.html"></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="user/login.html">登入</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="user/reg.html">注册</a>
+      </li>
+      <li class="layui-nav-item layui-hide-xs">
+        <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
+      </li>
+      <li class="layui-nav-item layui-hide-xs">
+        <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="layui-container fly-marginTop animated fadeIn">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title">
+        <li><a th:href="@{/login}">登入</a></li>
+        <li class="layui-this">注册</li>
+      </ul>
+      <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+        <div class="layui-tab-item layui-show">
+          <div class="layui-form layui-form-pane">
+            <form method="post" th:action="@{/register}">
+              <div class="layui-form-item">
+                <label for="username" class="layui-form-label">账号</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="username" name="username" th:value="${user!=null?user.username:''}" required lay-verify="required" autocomplete="off" class="layui-input ">
+                </div>
+                <div class="layui-form-mid layui-word-aux" th:text="${usernameMsg}">6到16个字符</div>
+              </div>
+              <div class="layui-form-item">
+                <label for="password" class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                  <input type="password" id="password" name="password"  th:value="${user!=null?user.password:''}" required lay-verify="required|password" autocomplete="off" class="layui-input ">
+                </div>
+                <div class="layui-form-mid layui-word-aux" th:text="${passwordMsg!=null?passwordMsg:'6到16个字符'}">6到16个字符</div>
+              </div>
+              <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">确认密码</label>
+                <div class="layui-input-inline">
+                  <input type="password" id="L_repass" name="repass" th:value="${user!=null?user.password:''}" required lay-verify="required|repass" autocomplete="off" class="layui-input">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label for="email" class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="email" name="email" th:value="${user!=null?user.email:''}" required lay-verify="email" autocomplete="off" class="layui-input ">
+                </div>
+                <div class="layui-form-mid layui-word-aux" th:text="${emailMsg}"></div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">滑动验证</label>
+                <div class="layui-input-inline">
+                  <div id="slider"></div>
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <button class="layui-btn" lay-filter="*" lay-submit>立即注册</button>
+              </div>
+<!--              <div class="layui-form-item fly-form-app">
+                <span>或者直接使用社交账号快捷注册</span>
+                <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
+                <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
+              </div>-->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="fly-footer">
+  <p><a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy; <a href="http://www.layui.com/" target="_blank">layui.com 出品</a></p>
+  <p>
+    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>
+    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+  </p>
+</div>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/layui/sliderVerify/sliderVerify.js}"></script>
+<script th:src="@{/js/slider.js}"></script>
+<script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
+<script>
+layui.cache.page = 'user';
+layui.cache.user = {
+  username: '游客'
+  ,uid: -1
+  ,avatar: '/images/avatar/00.jpg'
+  ,experience: 83
+  ,sex: '男'
+};
+layui.config({
+  version: "3.0.0"
+  ,base: '/mods/'
+}).extend({
+  fly: 'index'
+}).use(['form'],function () {
+  var form = layui.form;
+  form.verify({
+    password:[/(.+){6,16}$/, '密码必须6到16位'],
+    repass:function (value) {
+      if(value!=$("#password").val()){
+        $("#L_repass").val("");
+        return "确认密码与密码不一致";
+      }
+    }
+  });
+
+});
+</script>
+
+</body>
+</html>
