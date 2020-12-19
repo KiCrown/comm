@@ -5,11 +5,11 @@
 <mapper namespace="com.hz.community.dao.UserMapper">
 
     <sql id="insertFields">
-        username, password, salt, email, type, status, activation_code, header_url, create_time
+        username, password ,sex, signature, experience,location,salt, email, type, status, activation_code, header_url, create_time
     </sql>
 
     <sql id="selectFields">
-        id, username, password, salt, email, type, status, activation_code, header_url, create_time
+        id, username, password,sex, signature, experience,location,salt, email, type, status, activation_code, header_url, create_time
     </sql>
 
     <select id="selectById" resultType="User">
@@ -32,7 +32,7 @@
 
     <insert id="insertUser" parameterType="User" keyProperty="id">
         insert into user (<include refid="insertFields"></include>)
-        values(#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
+        values(#{username}, #{password},#{sex}, #{signature}, #{experience} ,#{location},#{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
     </insert>
 
     <update id="updateStatus">
@@ -45,6 +45,14 @@
 
     <update id="updatePassword">
         update user set password = #{password} where id = #{id}
+    </update>
+
+    <update id="updateInformation">
+        update user set sex = #{sex},signature = #{signature},email = #{email},location=#{location} where id = #{id}
+    </update>
+
+    <update id="updateExperience">
+        update user set experience = #{experience} where id = #{id}
     </update>
 
 </mapper>

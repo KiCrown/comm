@@ -5,27 +5,178 @@
 <mapper namespace="com.hz.community.dao.DiscussPostMapper">
 
     <sql id="selectFields">
-        id,user_id,title,content,type,status,create_time,comment_count,score
+        id,user_id,title,content,type,status,tip,tag,create_time,comment_count,score
+    </sql>
+
+    <sql id="insertFields">
+        user_id,title,content,type,status,tip,tag,create_time,comment_count,score
     </sql>
 
     <select id="selectDiscussPosts" resultType="DiscussPost">
         select <include refid="selectFields"></include>
         from  discuss_post
         where status != 2
+        and type != 1
         <if test="userId!=0">
             and user_id = #{userId}
         </if>
-        order by type desc ,create_time desc
+        <if test="orderMode==0">
+            order by type desc ,create_time desc
+        </if>
+        <if test="orderMode==1">
+            order by type desc ,score desc ,create_time desc
+        </if>
         limit #{offset},#{limit}
     </select>
+
+    <select id="selectDiscussPostsByTip" resultType="DiscussPost">
+        select <include refid="selectFields"></include>
+        from  discuss_post
+        where status != 2
+        and tip = #{tip}
+        and type != 1
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+        <if test="status!=-1">
+            and status = #{status}
+        </if>
+        <if test="orderMode==0">
+            order by type desc ,create_time desc
+        </if>
+        <if test="orderMode==1">
+            order by type desc ,score desc ,create_time desc
+        </if>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="selectDiscussPostsByStatus" resultType="DiscussPost">
+        select <include refid="selectFields"></include>
+        from  discuss_post
+        where status = #{status}
+        and type != 1
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+        <if test="orderMode==0">
+            order by type desc ,create_time desc
+        </if>
+        <if test="orderMode==1">
+            order by type desc ,score desc ,create_time desc
+        </if>
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="selectDiscussPostsByType" resultType="DiscussPost">
+        select <include refid="selectFields"></include>
+        from  discuss_post
+        where type = #{type}
+        and status != 2
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+        <if test="tip!=-1">
+            and tip = #{tip}
+        </if>
+        order by type desc ,create_time desc
+    </select>
+
     <select id="selectDiscussPostRows" resultType="int">
         select count(id)
         from  discuss_post
         where status != 2
+        and type != 1
         <if test="userId!=0">
             and user_id = #{userId}
         </if>
 
     </select>
+
+    <select id="selectDiscussPostRowsOfTag" resultType="int">
+        select count(id)
+        from  discuss_post
+        where status != 2
+        and tag like  concat('%',#{tag},'%')
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+
+    </select>
+
+
+    <select id="selectDiscussPostRowsOfStatus" resultType="int">
+        select count(id)
+        from  discuss_post
+        where status = #{status}
+        and type != 1
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+
+    </select>
+
+    <select id="selectDiscussPostRowsOfTip" resultType="int">
+        select count(id)
+        from  discuss_post
+        where tip = #{tip}
+        and type != 1
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+        <if test="status!=-1">
+            and status = #{status}
+        </if>
+
+    </select>
+
+
+    <select id="selectDiscussPostsByTag" resultType="DiscussPost">
+        select <include refid="selectFields"></include>
+        from  discuss_post
+        where tag like  concat('%',#{tag},'%')
+        and status != 2
+        <if test="discussId!=0">
+            and id != #{discussId}
+        </if>
+        order by type desc ,score desc ,create_time desc
+        <if test="type==0">
+            limit 5
+        </if>
+        <if test="type==1">
+            limit #{offset},#{limit}
+        </if>
+    </select>
+
+
+    <insert id="insertDiscussPost" parameterType="DiscussPost" keyProperty="id">
+        insert into discuss_post(<include refid="insertFields"></include>)
+        values(#{userId},#{title},#{content},#{type},#{status},#{tip},#{tag},#{createTime},#{commentCount},#{score})
+    </insert>
+
+    <select id="selectDiscussPostById" resultType="DiscussPost">
+        select <include refid="selectFields"></include>
+        from  discuss_post
+        where id = #{id}
+    </select>
+
+    <update id="updateCommentCount">
+        update discuss_post set comment_count = #{commentCount} where id = #{id}
+    </update>
+
+    <update id="updateType">
+         update discuss_post set type = #{type} where id = #{id}
+    </update>
+
+    <update id="updateStatus">
+        update discuss_post set status = #{status} where id = #{id}
+    </update>
+
+    <update id="updateScore">
+        update discuss_post set score = #{score} where id = #{id}
+    </update>
+
+    <update id="updateDiscussPost">
+        update discuss_post set tip = #{tip},title = #{title},content = #{content},tag = #{tag},create_time = #{createTime} where id = #{id}
+    </update>
 
 </mapper>

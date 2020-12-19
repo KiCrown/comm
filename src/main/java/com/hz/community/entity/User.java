@@ -13,6 +13,10 @@ public class User {
     private int id;
     private String username;
     private String password;
+    private int sex;
+    private String signature;
+    private int experience;
+    private String location;
     private String salt;
     private String email;
     private int type;
